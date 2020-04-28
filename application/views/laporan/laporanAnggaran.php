@@ -137,6 +137,23 @@
                                     <td><?php echo formatRp($nominal[$b]) ?></td>
                                 </tr>
                             </tbody>
+                        </table><br>
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th style='text-align:center'>Total anggaran</th>
+                                    <th>
+                                        <?php
+                                            $e = 0;
+                                            $nominal_akhir = 0;
+                                            while ($e < $b) {
+                                                $e++;
+                                                $nominal_akhir = $nominal[$e]+$nominal_akhir;
+                                            }
+                                            echo formatRp($nominal_akhir); ?>
+                                    </th>
+                                </tr>
+                            </thead>
                         </table>
                     <br> <?php 
                 } 
