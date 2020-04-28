@@ -9,6 +9,7 @@ class laporan extends CI_controller
         $this->load->library('form_validation');
         $this->load->model('m_laporan');
         $this->load->model('m_coa');
+        $this->load->model('m_transaksi');
     }
     public function lihat_jurnal()
     {
@@ -78,34 +79,46 @@ class laporan extends CI_controller
     public function LaporanAnggaran()
     {
         $pages = 'laporan/laporanAnggaran';
-        if (isset($_POST['bulan']) && $_POST['tahun']) {
-            $bulan = $_POST['bulan'];
-            $tahun = $_POST['tahun'];
-            $pendapatan = @$this->db->select('periode, SUM(nominal) as nominal')->where('periode', $tahun.'-'.$bulan.'-'.'01')->where('kd_jenis_anggaran', 'JGR-556')->group_by('periode')->get('detail_anggaran')->result()[0]->nominal;
-            $pengeluaran = @$this->db->select('periode, SUM(nominal) as nominal')->where('periode', $tahun.'-'.$bulan.'-'.'01')->where('kd_jenis_anggaran', 'JGR-664')->group_by('periode')->get('detail_anggaran')->result()[0]->nominal;
-            $totalAnggaranPendapatan = empty($pendapatan) ? 0 : $pendapatan;
-            $totalAnggaranPengeluaran = empty($pengeluaran) ? 0 : $pengeluaran;
+        if (isset($_POST['month'])) {
+            $bulan = date('m', strtotime($_POST['month']));
+            $tahun = date('Y', strtotime($_POST['month']));
+            $tanggal = date('Y-m-d', strtotime($tahun.'-'.$bulan.'-01'));
+            // $pendapatan = @$this->db->select('periode, SUM(nominal) as nominal')->where('periode', $tahun.'-'.$bulan.'-'.'01')->where('kd_jenis_anggaran', 'JGR-556')->group_by('periode')->get('detail_anggaran')->result()[0]->nominal;
+            $anggaran = $this->m_transaksi->get_all_anggaran_by_periode($tanggal);
+            // $pengeluaran = @$this->db->select('periode, SUM(nominal) as nominal')->where('periode', $tahun.'-'.$bulan.'-'.'01')->where('kd_jenis_anggaran', 'JGR-664')->group_by('periode')->get('detail_anggaran')->result()[0]->nominal;
+            
+            $pendapatan = 0;
+            $pengeluaran = 0;
+            $jumlah = 0;
+            foreach ($anggaran as $val) {
+                $jumlah++;
+                if($val->kd_jenis_anggaran == 'JGR-556'){
+                    $pendapatan = $pendapatan+$val->nominal;
+                } else {
+                    $pengeluaran = $pengeluaran+$val->nominal;
+                }
+            }
+            $lap = $anggaran;
         } else {
             $bulan = '0';
             $tahun = '0';
-            $totalAnggaranPendapatan = 0;
-            $totalAnggaranPengeluaran = 0;
+            $pendapatan = 0;
+            $pengeluaran = 0;
+            $anggaran = 0;
+            $jumlah = 0;
+            $lap = null;
         }
         $data = [
-            'user'              => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
-            'title'             => 'Laporan',
-            'subtitle'          => 'Laporan Anggaran',
+            'user'          => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+            'title'         => 'Laporan',
+            'subtitle'      => 'Laporan Anggaran',
+            'bulan'         => $bulan,
+            'tahun'         => $tahun,
+            'pendapatan'    => $pendapatan,
+            'pengeluaran'   => $pengeluaran,
+            'lap'           => $lap,
+            'jumlah'        => $jumlah
         ];
-        $data['lap'] = $this->m_laporan->getLaporanAnggaran($bulan, $tahun, 'JKGT-208');
-        $data['lap2'] = $this->m_laporan->getLaporanAnggaran($bulan, $tahun, 'JKGT-216');
-        $data['lap3'] = $this->m_laporan->getLaporanAnggaran($bulan, $tahun, 'JKGT-288');
-        $data['totalAnggaranPendapatan'] = $totalAnggaranPendapatan;
-        $data['totalAnggaranPengeluaran'] = $totalAnggaranPengeluaran;
-        // $this->db->insert('realisasi_anggaran', $data);
-        // $alert = $this->main_generic->alert('Berhasil', 'Data berhasil disimpan', 'success');
-        // $this->session->set_flashdata('message', $alert);
-        // redirect('transaksi/realisasi');
         $this->main_generic->layout($pages, $data);
-
     }
 }

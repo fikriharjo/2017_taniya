@@ -78,6 +78,20 @@ class m_transaksi extends CI_model
             return array();
         }
     }
+
+    public function get_all_anggaran_by_periode($date){
+        $hasil = $this->db->order_by('jenis_kegiatan.kd_jenis_kegiatan', 'desc')
+                          ->where('periode', $date)
+                          ->join('jenis_anggaran', 'anggaran.kd_jenis_anggaran=jenis_anggaran.no_jenis_anggaran')
+                          ->join('kegiatan', 'anggaran.kd_kegiatan=kegiatan.unique_id')
+                          ->join('jenis_kegiatan', 'kegiatan.kd_jenis_kegiatan=jenis_kegiatan.kd_jenis_kegiatan')
+                          ->get('anggaran');
+        if($hasil->num_rows() > 0){
+            return $hasil->result();
+        } else {
+            return array();
+        }
+    }
     
     public function ambil_budget_by_date_test($date, $jenis){
         $hasil = $this->db->where('periode', $date)

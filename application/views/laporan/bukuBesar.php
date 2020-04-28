@@ -107,55 +107,56 @@
                             <?php
                                 $a = 0;
                                 // var_dump($buku_besar);die();
-                                foreach ($buku_besar as $row) { ?>
-                                    <tr>
-                                        <td><?php echo $row['tgl_realisasi'] ?></td>
-                                        <td><?php echo $row['nama_kegiatan'] ?></td>
-                                        <td>
-                                            <?php 
-                                                $show = false;
-                                                foreach ($coa as $val) {
-                                                    if(($row['coa1'] == $val['kode_akun']) and ($row['coa1'] == $akun)){
-                                                        echo $val['nama'];
-                                                        $show = true;
-                                                    } else if(($row['coa2'] == $val['kode_akun']) and ($row['coa2'] == $akun)){
-                                                        echo $val['nama'];
-                                                        $show = true;
+                                foreach ($buku_besar as $row) { 
+                                    $show = false;
+                                    foreach ($coa as $val) {
+                                        if(($row['coa1'] == $val['kode_akun']) and ($row['coa1'] == $akun)){
+                                            $nama = $val['nama'];
+                                            $reff = $val['kode_akun'];
+                                            $show = true;
+                                        } else if(($row['coa2'] == $val['kode_akun']) and ($row['coa2'] == $akun)){
+                                            $nama = $val['nama'];
+                                            $reff = $val['kode_akun'];
+                                            $show = true;
+                                        }
+                                    } 
+                                    if($show == true){ ?>
+                                        <tr>
+                                            <td><?php echo $row['tgl_realisasi'] ?></td>
+                                            <td><?php echo $nama ?></td>
+                                            <td><?php echo $reff ?></td>
+                                            <td>
+                                                <?php 
+                                                    if(($row['jenis_anggaran'] == 'Pendapatan') and ($show == true)){
+                                                        $total = $total+$row['nominal'];
+                                                        echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.');
                                                     }
-                                                }
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?php 
-                                                if(($row['jenis_anggaran'] == 'Pendapatan') and ($show == true)){
-                                                    $total = $total+$row['nominal'];
-                                                    echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.');
-                                                }
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?php 
-                                                if(($row['jenis_anggaran'] == 'Pengeluaran') and ($show == true)){
-                                                    $total = $total-$row['nominal'];
-                                                    echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.');
-                                                }
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?php 
-                                                if(($header == 1) or ($header == 5)){
-                                                    echo 'Rp. ' . number_format($total, 2, ',', '.');
-                                                }
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?php 
-                                                if(($header > 1) and ($header < 5)){
-                                                    echo 'Rp. ' . number_format($total, 2, ',', '.');
-                                                }
-                                            ?>
-                                        </td>
-                                    </tr> <?php
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <?php 
+                                                    if(($row['jenis_anggaran'] == 'Pengeluaran') and ($show == true)){
+                                                        $total = $total-$row['nominal'];
+                                                        echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.');
+                                                    }
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <?php 
+                                                    if(($header == 1) or ($header == 5)){
+                                                        echo 'Rp. ' . number_format($total, 2, ',', '.');
+                                                    }
+                                                ?>
+                                            </td>
+                                            <td>
+                                                <?php 
+                                                    if(($header > 1) and ($header < 5)){
+                                                        echo 'Rp. ' . number_format($total, 2, ',', '.');
+                                                    }
+                                                ?>
+                                            </td>
+                                        </tr> <?php
+                                    } 
                                 }
                             ?>
                         </tbody>

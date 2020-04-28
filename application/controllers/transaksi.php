@@ -261,7 +261,7 @@ class transaksi extends CI_controller
     }
 
     public function ambil_periode(){
-        $hasil = $this->m_transaksi->ambil_periode('JGR-664');
+        $hasil = $this->m_transaksi->ambil_periode(set_value('jenis'));
         echo json_encode($hasil);
     }
 
