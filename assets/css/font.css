@@ -1,0 +1,43 @@
+@font-face {
+    font-family: 'SourceSansPro', sans-serif;
+    src: url('./font/SourceSansPro-Regular.ttf');
+}
+@font-face {
+    font-family: 'SourceSansProLight', sans-serif;
+    src: url('./font/SourceSansPro-Light.ttf');
+}
+@font-face {
+    font-family: 'SourceSansProSemibold', sans-serif;
+    src: url('./font/SourceSansPro-Semibold.ttf');
+}
+@font-face {
+    font-family: 'SourceSansProBold', sans-serif;
+    src: url('./font/SourceSansPro-Bold.ttf');
+}
+@font-face {
+    font-family: 'SourceSansProExtraBold', sans-serif;
+    src: url('./font/SourceSansPro-ExtraBold.ttf');
+}
+
+body {
+    font-family: 'SourceSansPro', sans-serif;
+}
+.to-light {
+    font-family: 'SourceSansProLight', sans-serif!important;
+}
+.to-regular {
+    font-family: 'SourceSansPro', sans-serif!important;
+    font-weight: normal;
+}
+.to-semi-bold {
+    font-family: 'SourceSansProSemibold', sans-serif!important;
+    font-weight: bold;
+}
+.to-bold {
+    font-family: 'SourceSansProBold', sans-serif!important;
+    font-weight: bold;
+}
+.to-extra-bold {
+    font-family: 'SourceSansProExtraBold', sans-serif!important;
+    font-weight: bold;
+}
