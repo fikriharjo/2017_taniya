@@ -144,6 +144,7 @@
                                     <th style='text-align:center'>Total anggaran</th>
                                     <th>
                                         <?php
+                                            //bisa
                                             $e = 0;
                                             $nominal_akhir = 0;
                                             while ($e < $b) {
