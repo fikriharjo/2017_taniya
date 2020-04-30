@@ -120,7 +120,8 @@
                                             $show = true;
                                         }
                                     } 
-                                    if($show == true){ ?>
+                                    if($show == true){ 
+                                        $nol = 0; ?>
                                         <tr>
                                             <td><?php echo $row['tgl_realisasi'] ?></td>
                                             <td><?php echo $nama ?></td>
@@ -130,6 +131,8 @@
                                                     if(($row['jenis_anggaran'] == 'Pendapatan') and ($show == true)){
                                                         $total = $total+$row['nominal'];
                                                         echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.');
+                                                    } else {
+                                                        echo 'Rp. ' . number_format($nol, 2, ',', '.');
                                                     }
                                                 ?>
                                             </td>
@@ -138,6 +141,8 @@
                                                     if(($row['jenis_anggaran'] == 'Pengeluaran') and ($show == true)){
                                                         $total = $total-$row['nominal'];
                                                         echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.');
+                                                    } else {
+                                                        echo 'Rp. ' . number_format($nol, 2, ',', '.');
                                                     }
                                                 ?>
                                             </td>
@@ -145,6 +150,8 @@
                                                 <?php 
                                                     if(($header == 1) or ($header == 5)){
                                                         echo 'Rp. ' . number_format($total, 2, ',', '.');
+                                                    } else {
+                                                        echo 'Rp. ' . number_format($nol, 2, ',', '.');
                                                     }
                                                 ?>
                                             </td>
@@ -152,6 +159,8 @@
                                                 <?php 
                                                     if(($header > 1) and ($header < 5)){
                                                         echo 'Rp. ' . number_format($total, 2, ',', '.');
+                                                    } else {
+                                                        echo 'Rp. ' . number_format($nol, 2, ',', '.');
                                                     }
                                                 ?>
                                             </td>

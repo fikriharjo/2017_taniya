@@ -31,8 +31,6 @@ class laporan extends CI_controller
         $data['bulan']  = $bulan;
         $data['coa']    = $this->m_coa->get2('coa');
         $data['jurnal'] = $this->m_laporan->get_jurnal($bulan, $tahun);
-        $data['debit']  = $this->m_laporan->get_total_db($bulan, $tahun);
-        $data['credit'] = $this->m_laporan->get_total_cr($bulan, $tahun);
         $data['menu']   = 'journal';
         $this->main_generic->layout($pages, $data);
     }
@@ -90,9 +88,11 @@ class laporan extends CI_controller
             $pendapatan = 0;
             $pengeluaran = 0;
             $jumlah = 0;
+            // var_dump($anggaran); die();
             foreach ($anggaran as $val) {
                 $jumlah++;
-                if($val->kd_jenis_anggaran == 'JGR-556'){
+                $jenisnya = strtoupper($val->jenis_anggaran);
+                if($jenisnya == 'PENDAPATAN'){
                     $pendapatan = $pendapatan+$val->nominal;
                 } else {
                     $pengeluaran = $pengeluaran+$val->nominal;

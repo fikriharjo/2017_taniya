@@ -62,59 +62,15 @@
                         $itung = 0;
                         // var_dump($lap);die();
                         foreach ($lap as $val) {
-                            $a++;
-                            if($a == 1){
-                                $b++;
-                                $itung++;
-                                $jenis[$b] = $val->kd_jenis_kegiatan ?>
-                                <td>Jenis Kegiatan : <?php echo $val->jenis_kegiatan ?></td>
-                                <table class="table table-bordered table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Nama Kegiatan</th>
-                                            <th>Nominal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><?php echo $itung ?></td>
-                                            <td><?php echo $val->nama_kegiatan ?></td>
-                                            <td><?php echo formatRp($val->nominal) ?></td>
-                                        </tr> <?php
-                                        $nominal[$b]    = $val->nominal;
-                                        } else {
-                                            $c = 0;
-                                            $init = false;
-                                            while ($c < $b) {
-                                                $c++;
-                                                if($val->kd_jenis_kegiatan == $jenis[$c]){
-                                                    $init = true;
-                                                    $itung++; ?>
-                                                    <tr>
-                                                        <td><?php echo $itung; ?></td>
-                                                        <td><?php echo $val->nama_kegiatan ?></td>
-                                                        <td><?php echo formatRp($val->nominal) ?></td>
-                                                    </tr> <?php
-                                                    $nominal[$b]    = $nominal[$b]+$val->nominal;
-                                                }
-                                            }
-
-                                            if($init == false){ ?>
-                                            <tr>
-                                                <td colspan='2' style='text-align:center'>Total</td>
-                                                <td><?php echo formatRp($nominal[$b]) ?></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                        <?php
-                                            $b++;
-                                            $itung = 1;
-                                            $jenis[$b] = $val->kd_jenis_kegiatan;
-                                        ?>
-                                        <br>
-                                        <td>Jenis Kegiatan : <?php echo $val->jenis_kegiatan ?></td>
-                                        <table class="table table-bordered table-hover">
+                            $jenisnya = strtoupper($val->jenis_anggaran);
+                            if($jenisnya != 'PENDAPATAN'){
+                                $a++;
+                                if($a == 1){
+                                    $b++;
+                                    $itung++;
+                                    $jenis[$b] = $val->kd_jenis_kegiatan ?>
+                                    <td>Jenis Kegiatan : <?php echo $val->jenis_kegiatan ?></td>
+                                    <table class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
@@ -129,14 +85,62 @@
                                                 <td><?php echo formatRp($val->nominal) ?></td>
                                             </tr> <?php
                                             $nominal[$b]    = $val->nominal;
+                                            } else {
+                                                $c = 0;
+                                                $init = false;
+                                                while ($c < $b) {
+                                                    $c++;
+                                                    if($val->kd_jenis_kegiatan == $jenis[$c]){
+                                                        $init = true;
+                                                        $itung++; ?>
+                                                        <tr>
+                                                            <td><?php echo $itung; ?></td>
+                                                            <td><?php echo $val->nama_kegiatan ?></td>
+                                                            <td><?php echo formatRp($val->nominal) ?></td>
+                                                        </tr> <?php
+                                                        $nominal[$b]    = $nominal[$b]+$val->nominal;
+                                                    }
+                                                }
+
+                                                if($init == false){ ?>
+                                                <tr>
+                                                    <td colspan='2' style='text-align:center'>Total</td>
+                                                    <td><?php echo formatRp($nominal[$b]) ?></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                            <?php
+                                                $b++;
+                                                $itung = 1;
+                                                $jenis[$b] = $val->kd_jenis_kegiatan;
+                                            ?>
+                                            <br>
+                                            <td>Jenis Kegiatan : <?php echo $val->jenis_kegiatan ?></td>
+                                            <table class="table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nama Kegiatan</th>
+                                                    <th>Nominal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td><?php echo $itung ?></td>
+                                                    <td><?php echo $val->nama_kegiatan ?></td>
+                                                    <td><?php echo formatRp($val->nominal) ?></td>
+                                                </tr> <?php
+                                                $nominal[$b]    = $val->nominal;
+                                            }
                                         }
-                                    }
+                                    } 
                                 } ?>
+                            
                                 <tr>
                                     <td colspan='2' style='text-align:center'>Total</td>
                                     <td><?php echo formatRp($nominal[$b]) ?></td>
                                 </tr>
-                            </tbody>
+                            </tbody> 
                         </table><br>
                         <table class="table table-bordered table-hover">
                             <thead>

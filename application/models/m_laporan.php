@@ -17,7 +17,7 @@ class m_laporan extends CI_model
         $this->db->select('distinct(realisasi.kd_realisasi), detail_realisasi.nominal as nominal, coa1, coa2, tgl_realisasi,');
         $this->db->from('realisasi');
         $this->db->join('detail_realisasi', 'realisasi.kd_realisasi = detail_realisasi.kd_realisasi');
-        $this->db->join('anggaran', 'anggaran.periode = realisasi.periode');
+        $this->db->join('anggaran', 'anggaran.no_anggaran = realisasi.no_anggaran');
         $this->db->join('kegiatan', 'kegiatan.unique_id = anggaran.kd_kegiatan');
         $this->db->where('DATE_FORMAT(tgl_realisasi,"%m")', $bulan);
         $this->db->where('DATE_FORMAT(tgl_realisasi,"%Y")', $tahun);

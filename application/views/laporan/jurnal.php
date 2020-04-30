@@ -64,7 +64,6 @@
                                 $nama[$a]       = $val->nama;
                             }
                             $spasi = '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp';
-                            // var_dump($jurnal); die();
                             $debit  = 0;
                             $kredit = 0;
                             foreach ($jurnal as $row) : ?>
