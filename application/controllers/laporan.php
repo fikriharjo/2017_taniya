@@ -51,14 +51,6 @@ class laporan extends CI_controller
             $tahun      = '0';
             $tanggal    = '0';
         }
-        $previous1 = $this->m_laporan->total_db($akun, $bulan - 1, $tahun);
-        $previous2 = $this->m_laporan->total_cr($akun, $bulan - 1, $tahun);
-        $saldo = $previous1 - $previous2;
-        if (!empty($saldo)) {
-            $data['saldo_awal'] = $saldo;
-        } else {
-            $data['saldo_awal'] = 0;
-        }
         $data = [
             'user'          => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             'title'         => 'Buku Besar',
