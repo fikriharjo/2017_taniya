@@ -16,6 +16,18 @@ class m_transaksi extends CI_model
             return array();
         }
     }
+    public function lihat_realisasi_sum_detail($date){
+        $hasil = $this->db->group_by('realisasi.kd_realisasi')
+                          ->where('realisasi.periode', $date)
+                          ->join('detail_realisasi', 'detail_realisasi.kd_realisasi = realisasi.kd_realisasi')
+                          ->select('sum(detail_realisasi.nominal) as nominal, realisasi.kd_realisasi, realisasi.no_anggaran')
+                          ->get('realisasi');
+        if($hasil->num_rows() > 0){
+            return $hasil->result();
+        } else {
+            return array();
+        }
+    }
     public function lihat_anggaran_by_no_anggaran($no_anggaran){
         $hasil = $this->db->where('no_anggaran', $no_anggaran)
                           ->get('anggaran');

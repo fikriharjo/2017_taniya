@@ -7,6 +7,7 @@ class user extends CI_controller
         parent::__construct();
         is_logged_in();
         $this->load->library('form_validation');
+        $this->load->model('m_master_data');
     }
     public function index()
     {
@@ -93,5 +94,47 @@ class user extends CI_controller
                 }
             }
         }
+    }
+
+    public function listUser(){
+        $pages = 'user/listUser';
+        $lihat_user = $this->m_master_data->lihat_all_user();
+        $data = [
+            'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+            'title'     => 'List User',
+            'subtitle'  => 'List All User',
+            'result'    => $lihat_user
+        ];
+        $this->main_generic->layout($pages, $data);
+    }
+    public function tambah_user(){
+        $cari_username = $this->m_master_data->cari_username(set_value('username'));
+        if($cari_username == null){
+            $data = array(
+                'username'      => set_value('username'),
+                'name'          => set_value('nama_user'),
+                'email'         => set_value('email'),
+                'password'      => password_hash(set_value('password'), PASSWORD_DEFAULT),
+                'role_id'       => set_value('role'),
+                'is_active'     => 1,
+                'date_created'  => 1
+            );
+            $this->m_master_data->tambah_user($data);
+            redirect('user/listUser');
+        } else {
+            // var_dump('User sudah ada'); die();
+            redirect('user/listUser');
+        }
+    }
+    public function edit_user(){
+        $data = array(
+            'name'  => set_value('name'),
+            'email' => set_value('email')
+        );
+        // var_dump(set_value('id')); die();
+        $this->m_master_data->edit_user(set_value('id'), $data);
+        $alert = $this->main_generic->alert('Berhasil', 'Data berhasil disimpan', 'success');
+        $this->session->set_flashdata('message', $alert);
+        redirect('user/listUser');
     }
 }

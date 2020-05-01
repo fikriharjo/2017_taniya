@@ -11,14 +11,12 @@ class master_data extends CI_controller
         $this->load->model('m_kegiatan');
         $this->load->model('m_master_data');
     }
-    public function coa()
-    {
+    public function coa(){
         $pages = 'master_data/coa';
         $data = [
             'user' => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             'title' => 'Chart Of Account',
             'subtitle' => 'List COA',
-
             'result' => $this->m_coa->get('coa'),
         ];
         $this->form_validation->set_rules('coa', 'COA', 'required', [
@@ -44,6 +42,9 @@ class master_data extends CI_controller
     }
     public function edit_coa()
     {
+        $idnya = $this->m_coa->cari_by_id($_POST['coa_id']);
+        $idnya = $idnya->kode_akun;
+
         $this->db->set('kode_akun', $_POST['header_akun'].$_POST['kode_akun']);
         $this->db->set('nama', $_POST['coa']);
         $this->db->where('id', $_POST['coa_id']);
@@ -53,6 +54,15 @@ class master_data extends CI_controller
             var_dump('Error, header harus 1-5');die();
         }
         $this->db->update('coa');
+
+        $this->db->set('coa2', $_POST['header_akun'].$_POST['kode_akun']);
+        $this->db->where('coa2', $idnya);
+        $this->db->update('kegiatan');
+
+        $this->db->set('coa1', $_POST['header_akun'].$_POST['kode_akun']);
+        $this->db->where('coa1', $idnya);
+        $this->db->update('kegiatan');
+
         $alert = $this->main_generic->alert('Berhasil', 'Data berhasil diubah', 'success');
         $this->session->set_flashdata('message', $alert);
         redirect('master_data/coa');
@@ -144,5 +154,14 @@ class master_data extends CI_controller
         $alert = $this->main_generic->alert('Berhasil', 'Data berhasil diubah', 'success');
         $this->session->set_flashdata('message', $alert);
         redirect('master_data/jenis_kegiatan');
+    }
+    public function delete_jenis_kegiatan($id){
+        var_dump('coming soon');die();
+    }
+    public function delete_kegiatan($id){
+        var_dump('coming soon');die();
+    }
+    public function delete_coa($id){
+        var_dump('coming soon');die();
     }
 }

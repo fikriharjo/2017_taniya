@@ -29,9 +29,9 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Kode Kegiatan</th>
-                        <th>Nama Kegiatan</th>
-                        <th>Jenis Kegiatan</th>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th>Role</th>
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -41,14 +41,14 @@
                         $no++; ?>
                         <tr>
                             <td><?= $no ?></td>
-                            <td><?= $row['unique_id'] ?></td>
-                            <td><?= $row['nama_kegiatan'] ?></td>
-                            <td><?= $row['jenis_kegiatan'] ?></td>
+                            <td><?= $row->name ?></td>
+                            <td><?= $row->email ?></td>
+                            <td><?= $row->role_id ?></td>
                             <td align="center">
-                                <a data-kgt_id="<?= $row['id'] ?>" data-name="<?= $row['nama_kegiatan'] ?>" data-kode="<?= $row['unique_id'] ?>" data-toggle="modal" data-target="#modal-edit" href="#" class="btn btn-warning btn-sm" title="edit"><i class="fa fa-edit"></i></a>
-                                <a class="btn btn-danger btn-sm" title="hapus" href=<?php echo base_url('master_data/delete_kegiatan/'.$row['id']) ?>>
-                                    <i class="fa fa-trash"></i>
+                                <a data-id="<?= $row->id_user ?>" data-name="<?= $row->name ?>" data-email="<?= $row->email ?>" data-toggle="modal" data-target="#modal-edit" href="#" class="btn btn-warning btn-sm" title="edit">
+                                    <i class="fa fa-edit"></i>
                                 </a>
+                                <a class="btn btn-danger btn-sm" title="hapus"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     <?php } ?>
@@ -63,62 +63,39 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Data Menu</h4>
+                <h4 class="modal-title">Tambah User</h4>
             </div>
             <div class="modal-body">
-                <form action="<?php echo base_url('master_data/kegiatan') ?>" method="POST">
+                <form action="<?php echo base_url('user/tambah_user') ?>" method="POST">
                     <div class="form-group col-md-12">
-                        <label>Kode Kegiatan</label>
-                        <input type="text" name="kode" class="form-control" value="<?= $unique ?>" readonly>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label>Nama Kegiatan</label>
-                        <input type="text" name="nama_kegiatan" class="form-control" placeholder='--Masukan Nama Kegiatan--'>
+                        <label>Username</label>
+                        <input type="text" name="username" class="form-control" placeholder='-- Masukan username --'>
                     </div>
                     <div class="form-group col-md-12">
-                        <label>Jenis Kegiatan</label>
-                        <select name="jenis_kegiatan" class="form-control">
-                            <option disabled selected>--Pilih Jenis Kegiatan--</option>
-                            <?php 
-                                foreach ($jenis_kegiatan as $row) { ?>
-                                    <option value="<?= $row['kd_jenis_kegiatan'] ?>"><?= $row['jenis_kegiatan'] ?></option> <?php 
-                                } 
-                            ?>
-                        </select>
+                        <label>Nama</label>
+                        <input type="text" name="nama_user" class="form-control" placeholder='-- Masukan nama user --'>
                     </div>
                     <div class="form-group col-md-12">
-                        <label>Jenis Anggaran</label>
-                        <select name="jenis_anggaran" class="form-control">
-                            <option disabled selected>--Pilih Jenis Anggaran--</option>
-                            <?php 
-                                foreach ($jenis_anggaran as $row) { ?>
-                                    <option value="<?= $row['no_jenis_anggaran'] ?>"><?= $row['jenis_anggaran'] ?></option> <?php 
-                                } 
-                            ?>
+                        <label>Email</label>
+                        <input type="text" name="email" class="form-control" placeholder='-- Masukan email --'>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Password</label>
+                        <input type="password" name="password" class="form-control" placeholder='-- Masukan password --'>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Role</label>
+                        <select name="role" class="form-control">
+                            <option disabled selected>-- Pilih role --</option>
+                            <option value='1'>1</option>
+                            <option value='2'>2</option>
+                            <option value='3'>3</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label>COA Debit</label>
-                        <select name="coa1" class="form-control">
-                            <option disabled selected>--Pilih COA--</option>
-                            <?php 
-                                foreach ($coa as $row_coa) { ?>
-                                    <option value="<?= $row_coa['kode_akun'] ?>"><?= $row_coa['nama'] ?></option> <?php 
-                                } 
-                            ?>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>COA Kredit</label>
-                        <select name="coa2" class="form-control">
-                            <option disabled selected>--Pilih COA--</option>
-                            <?php 
-                                foreach ($coa as $row_coa2) { ?>
-                                    <option value="<?= $row_coa2['kode_akun'] ?>"><?= $row_coa2['nama'] ?></option> <?php 
-                                } 
-                            ?>
-                        </select>
-                    </div>
+                    <!-- <div class="form-group col-md-12">
+                        <label>Foto</label>
+                        <input type="file" name="userfile" class="form-control">
+                    </div> -->
                 </div>
                 <div class="modal-footer ">
                     <button type="button" class="btn btn-default pull-left " data-dismiss="modal">Close</button>
@@ -136,18 +113,18 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Edit Kegiatan </span></h4>
+                <h4 class="modal-title">Edit User </span></h4>
             </div>
             <div class="modal-body">
-                <form method="POST" action="<?= base_url('master_data/edit_jkegiatan') ?>">
-                    <input type="hidden" name="kgt_id" id="kgt_id">
+                <form method="POST" action="<?= base_url('user/edit_user') ?>">
+                    <input type="hidden" name="id" id="id">
                     <div class="form-group">
-                        <label>Kode Kegiatan</label>
-                        <input type="text" class="form-control" id="kode" readonly>
+                        <label>Nama</label>
+                        <input type="text" class="form-control" name="name" id='name'>
                     </div>
                     <div class="form-group">
-                        <label>Nama Kegiatan</label>
-                        <input type="text" name="kgt" class="form-control" id="name">
+                        <label>Email</label>
+                        <input type="text" name="email" class="form-control" id="email">
                     </div>
             </div>
             <div class="modal-footer">
@@ -173,12 +150,11 @@
         })
     });
     $(document).on('click', '.btn-warning', function() {
-        var kgt_id = $(this).attr('data-kgt_id'),
-            name = $(this).attr('data-name'),
-            kode = $(this).attr('data-kode');
-        $('#kgt_id').val(kgt_id);
+        var id      = $(this).attr('data-id'),
+            name    = $(this).attr('data-name'),
+            email   = $(this).attr('data-email');
+        $('#id').val(id);
         $('#name').val(name);
-        $('#kode').val(kode);
-
+        $('#email').val(email);
     })
 </script>

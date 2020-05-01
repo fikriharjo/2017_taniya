@@ -20,7 +20,7 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <form method="POST" action="<?php echo site_url('laporan/laporanAnggaran') ?>">
+            <form method="POST" action="<?php echo site_url('laporan/bandingkanAnggaran') ?>">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-10">
@@ -60,7 +60,17 @@
                         $a = 0;
                         $b = 0;
                         $itung = 0;
+                        $nol = 0;
+                        $total_realisasi = 0;
+                        $realisasi_nominal = 0;
                         // var_dump($lap);die();
+                        $z = 0;
+                        foreach ($realisasi as $value) {
+                            $z++;
+                            $real_no_anggaran[$z]   = $value->no_anggaran;
+                            $real_nominal[$z]       = $value->nominal;
+                        }
+
                         foreach ($lap as $val) {
                             $jenisnya = strtoupper($val->jenis_anggaran);
                             if($jenisnya != 'PENDAPATAN'){
@@ -68,6 +78,7 @@
                                 if($a == 1){
                                     $b++;
                                     $itung++;
+                                    $nilai = 0;
                                     $jenis[$b] = $val->kd_jenis_kegiatan ?>
                                     <td>Jenis Kegiatan : <?php echo $val->jenis_kegiatan ?></td>
                                     <table class="table table-bordered table-hover">
@@ -75,7 +86,9 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Kegiatan</th>
-                                                <th>Nominal</th>
+                                                <th>Anggaran</th>
+                                                <th>Realisasi</th>
+                                                <th>Persentase</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -83,6 +96,37 @@
                                                 <td><?php echo $itung ?></td>
                                                 <td><?php echo $val->nama_kegiatan ?></td>
                                                 <td><?php echo formatRp($val->nominal) ?></td>
+                                                <td>
+                                                    <?php 
+                                                        // var_dump($realisasi); die();
+                                                        $y = 0;
+                                                        $x = 0;
+                                                        $inisialisasi = false;
+                                                        while ($y < $z) { 
+                                                            $y++;
+                                                            if($val->no_anggaran == $real_no_anggaran[$y]){
+                                                                echo formatRp($real_nominal[$y]);
+                                                                $inisialisasi = true;
+                                                                $x = $y;
+                                                                $y = $z;
+                                                            }
+                                                        }
+                                                        if($inisialisasi == false){
+                                                            $total_realisasi    = $total_realisasi+0;
+                                                            $realisasi_nominal  = 0;
+                                                            echo formatRp($nol);
+                                                        } else {
+                                                            $realisasi_nominal  = $realisasi_nominal+$real_nominal[$x];
+                                                            $total_realisasi    = $total_realisasi+$real_nominal[$x];
+                                                        }
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php
+                                                        $hasil = $realisasi_nominal/$val->nominal*100;
+                                                        echo number_format($hasil,0,',','.').'%';
+                                                    ?>
+                                                </td>
                                             </tr> <?php
                                             $nominal[$b]    = $val->nominal;
                                             } else {
@@ -97,6 +141,38 @@
                                                             <td><?php echo $itung; ?></td>
                                                             <td><?php echo $val->nama_kegiatan ?></td>
                                                             <td><?php echo formatRp($val->nominal) ?></td>
+                                                            <td>
+                                                                <?php
+                                                                    $y = 0;
+                                                                    $x = 0;
+                                                                    $inisialisasi = false;
+                                                                    while ($y < $z) {
+                                                                        $y++;
+                                                                        if($val->no_anggaran == $real_no_anggaran[$y]){
+                                                                            echo formatRp($real_nominal[$y]);
+                                                                            $inisialisasi = true;
+                                                                            $x = $y;
+                                                                            $y = $z;
+                                                                        }
+                                                                    }
+                                                                    if($inisialisasi == false){
+                                                                        $total_realisasi    = $total_realisasi+0;
+                                                                        $realisasi_nominal  = $realisasi_nominal+0;
+                                                                        $nilai = 0;
+                                                                        echo formatRp($nol);
+                                                                    } else {
+                                                                        $nilai = $real_nominal[$x];
+                                                                        $realisasi_nominal  = $realisasi_nominal+$real_nominal[$x];
+                                                                        $total_realisasi    = $total_realisasi+$real_nominal[$x];
+                                                                    }
+                                                                ?>
+                                                            </td>
+                                                            <td>
+                                                                <?php
+                                                                    $hasil = $nilai/$val->nominal*100;
+                                                                    echo number_format($hasil,0,',','.').'%';
+                                                                ?>
+                                                            </td>
                                                         </tr> <?php
                                                         $nominal[$b]    = $nominal[$b]+$val->nominal;
                                                     }
@@ -106,6 +182,13 @@
                                                 <tr>
                                                     <td colspan='2' style='text-align:center'>Total</td>
                                                     <td><?php echo formatRp($nominal[$b]) ?></td>
+                                                    <td><?php echo formatRp($realisasi_nominal) ?></td>
+                                                    <td>
+                                                        <?php
+                                                            $hasil = $realisasi_nominal/$nominal[$b]*100;
+                                                            echo (number_format($hasil,0,',','.')).'%';
+                                                        ?>
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -121,7 +204,9 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Nama Kegiatan</th>
-                                                    <th>Nominal</th>
+                                                    <th>Anggaran</th>
+                                                    <th>Realisasi</th>
+                                                    <th>Persentase</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -129,6 +214,36 @@
                                                     <td><?php echo $itung ?></td>
                                                     <td><?php echo $val->nama_kegiatan ?></td>
                                                     <td><?php echo formatRp($val->nominal) ?></td>
+                                                    <td>
+                                                        <?php
+                                                            $y = 0;
+                                                            $x = 0;
+                                                            $inisialisasi = false;
+                                                            while ($y < $z) {
+                                                                $y++;
+                                                                if($val->no_anggaran == $real_no_anggaran[$y]){
+                                                                    echo formatRp($real_nominal[$y]);
+                                                                    $inisialisasi = true;
+                                                                    $x = $y;
+                                                                    $y = $z;
+                                                                }
+                                                            }
+                                                            if($inisialisasi == false){
+                                                                $total_realisasi    = $total_realisasi+0;
+                                                                $realisasi_nominal  = 0;
+                                                                echo formatRp($nol);
+                                                            } else {
+                                                                $realisasi_nominal  = $real_nominal[$x];
+                                                                $total_realisasi    = $total_realisasi+$real_nominal[$x];
+                                                            }
+                                                        ?>
+                                                    </td>
+                                                    <td>
+                                                        <?php
+                                                            $hasil = $realisasi_nominal/$val->nominal*100;
+                                                            echo number_format($hasil,0,',','.').'%';
+                                                        ?>
+                                                    </td>
                                                 </tr> <?php
                                                 $nominal[$b]    = $val->nominal;
                                             }
@@ -139,13 +254,20 @@
                                 <tr>
                                     <td colspan='2' style='text-align:center'>Total</td>
                                     <td><?php echo formatRp($nominal[$b]) ?></td>
+                                    <td><?php echo formatRp($realisasi_nominal) ?></td>
+                                    <td>
+                                        <?php 
+                                            $hasil = $realisasi_nominal/$nominal[$b]*100;
+                                            echo (number_format($hasil,0,',','.')).'%';
+                                        ?>
+                                    </td>
                                 </tr>
                             </tbody> 
                         </table><br>
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th style='text-align:center'>Total anggaran</th>
+                                    <th style='text-align:center'>Total</th>
                                     <th>
                                         <?php
                                             //bisa
@@ -156,6 +278,13 @@
                                                 $nominal_akhir = $nominal[$e]+$nominal_akhir;
                                             }
                                             echo formatRp($nominal_akhir); ?>
+                                    </th>
+                                    <th><?php echo formatRp($total_realisasi) ?></th>
+                                    <th>
+                                        <?php 
+                                            $hasil  = $total_realisasi/$nominal_akhir*100;
+                                            echo (number_format($hasil,0,',','.')).'%';
+                                        ?>
                                     </th>
                                 </tr>
                             </thead>

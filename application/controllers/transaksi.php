@@ -294,9 +294,11 @@ class transaksi extends CI_controller
         if ($this->form_validation->run() == false) {
             $this->main_generic->layout($pages, $data);
         } else {
+            // var_dump(set_value('jenis_anggaran'));die();
             if((set_value('sisa_anggaran') < set_value('nominal')) and (set_value('jenis_anggaran') == 'JGR-664')){
+                // var_dump('1');die();
                 redirect('transaksi/tambah_kekurangan_anggaran/'.set_value('nama_kegiatan').'/'.set_value('nominal_hasil_kurang'));
-            } else if((set_value('nominal_hasil_kurang') < 0)){
+            } else if((set_value('nominal_hasil_kurang') < 0) and (set_value('jenis_anggaran') == 'JGR-664')){
                 // var_dump('jos2'); die();
                 $data1 = [
                     'kd_realisasi'      => $_POST['kd_realisasi'],

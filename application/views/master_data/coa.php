@@ -36,23 +36,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php $no = 0;
-                    foreach ($result as $row) {
-                        $no++; 
-                        $pisahin = str_split($row['kode_akun']);
-                        $header[$no] = $pisahin[0];
-                        $kode_akun[$no] = $pisahin[1].$pisahin[2];
-                        ?>
-                        <tr>
-                            <td><?= $no ?></td>
-                            <td><?= $row['kode_akun'] ?></td>
-                            <td><?= $row['nama'] ?></td>
-                            <td align="center">
-                                <a data-coa_id="<?= $row['id'] ?>" data-name="<?= $row['nama'] ?>" data-kode_akun="<?= $kode_akun[$no] ?>" data-header_akun="<?= $header[$no] ?>" data-toggle="modal" data-target="#modal-edit" href="#" class="btn btn-warning btn-sm" title="edit"><i class="fa fa-edit"></i></a>
-                                <a class="btn btn-danger btn-sm" title="hapus"><i class="fa fa-trash"></i></a>
-                            </td>
-                        </tr>
-                    <?php } ?>
+                    <?php 
+                        $no = 0;
+                        foreach ($result as $row) {
+                            if(($row['kode_akun'] != null) and ($row['nama'] != null)){
+                                $no++;
+                                $pisahin = str_split($row['kode_akun']);
+                                // var_dump($pisahin);die();
+                                if($no == 22){
+                                    var_dump($pisahin);die();
+                                }
+                                $header[$no] = $pisahin[0];
+                                $kode_akun[$no] = $pisahin[1].$pisahin[2];
+                                ?>
+                                <tr>
+                                    <td><?= $no ?></td>
+                                    <td><?= $row['kode_akun'] ?></td>
+                                    <td><?= $row['nama'] ?></td>
+                                    <td align="center">
+                                        <a data-coa_id="<?= $row['id'] ?>" data-name="<?= $row['nama'] ?>" data-kode_akun="<?= $kode_akun[$no] ?>" data-header_akun="<?= $header[$no] ?>" data-toggle="modal" data-target="#modal-edit" href="#" class="btn btn-warning btn-sm" title="edit"><i class="fa fa-edit"></i></a>
+                                        <a class="btn btn-danger btn-sm" title="hapus" href=<?php echo base_url('master_data/delete_coa/'.$row['id']) ?>>
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr> <?php
+                            }
+                        } 
+                    ?>
                 </tbody>
             </table>
         </div>

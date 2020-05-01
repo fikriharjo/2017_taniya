@@ -12,6 +12,15 @@ class m_coa extends CI_model
         return $this->db->get($table)->result();
     }
 
+    public function cari_by_id($id){
+        $hasil = $this->db->where('id', $id)
+                          ->get('coa');
+        if($hasil->num_rows() > 0){
+            return $hasil->row();
+        } else {
+            return array();
+        }
+    }
     public function get_all_debit(){
         return $this->db->query('
                                     Select  *
