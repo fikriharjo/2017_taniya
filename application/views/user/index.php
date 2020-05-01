@@ -21,6 +21,7 @@
                 <!-- Profile Image -->
                 <div class="box box-primary">
                     <div class="box-body box-profile">
+                    
                         <img class="profile-user-img img-responsive img-circle" src="<?= base_url('assets/plugins/lte/dist/img/') . $user['image'] ?>" alt="User profile picture">
 
                         <h3 class="profile-username text-center"><?php echo $user['name'] ?></h3>

@@ -18,7 +18,7 @@ class auth extends CI_controller
 		$this->form_validation->set_rules('password', 'Password', 'required|trim');
 		if ($this->form_validation->run() == false) {
 
-			$this->load->view('core/html-header');
+			// $this->load->view('core/html-header');
 			$this->load->view('auth/login');
 			$this->load->view('core/html-footer');
 		} else {
