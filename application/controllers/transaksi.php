@@ -98,16 +98,19 @@ class transaksi extends CI_controller
                         'kd_kegiatan'       => $anggaran->kd_kegiatan,
                         'nominal'           => set_value('transfer')
                     );
-                    $this->m_transaksi->insert_table('anggaran', $data);
-                    redirect('transaksi/sisa_anggaran');
+                    $this->m_transaksi->insert_table('anggaran', $data);    
+                    $alert = $this->main_generic->alert('Berhasil', 'Data berhasil disimpan', 'success');
+                    $this->session->set_flashdata('message', $alert);
                 } else {
                     $nominal_ada = $cari->nominal+set_value('transfer');
                     $data = array(
                         'nominal'   => $nominal_ada
                     );
                     $this->m_transaksi->update_anggaran($cari->id, $data);
-                    redirect('transaksi/sisa_anggaran');
+                    $alert = $this->main_generic->alert('Berhasil', 'Data berhasil diupdate', 'success');
+                    $this->session->set_flashdata('message', $alert);
                 }
+                redirect('transaksi/sisa_anggaran');
             }
         }
         
@@ -297,6 +300,8 @@ class transaksi extends CI_controller
             // var_dump(set_value('jenis_anggaran'));die();
             if((set_value('sisa_anggaran') < set_value('nominal')) and (set_value('jenis_anggaran') == 'JGR-664')){
                 // var_dump('1');die();
+                $alert = $this->main_generic->alert('Warning', 'Sisa anggaran kurang', 'warning');
+                $this->session->set_flashdata('message', $alert);
                 redirect('transaksi/tambah_kekurangan_anggaran/'.set_value('nama_kegiatan').'/'.set_value('nominal_hasil_kurang'));
             } else if((set_value('nominal_hasil_kurang') < 0) and (set_value('jenis_anggaran') == 'JGR-664')){
                 // var_dump('jos2'); die();
@@ -315,6 +320,8 @@ class transaksi extends CI_controller
                 ];
                 $this->session->set_userdata('data_1', $data1);
                 $this->session->set_userdata('data_2', $data2);
+                $alert = $this->main_generic->alert('Berhasil', 'Isi data selanjutnya', 'success');
+                $this->session->set_flashdata('message', $alert);
                 redirect('transaksi/tambahKekuranganRealisasi/'.set_value('kd_realisasi').'/'.set_value('periode').'/'.set_value('jenis_anggaran'));
             } else {
                 // var_dump('jos3'); die();
@@ -350,8 +357,12 @@ class transaksi extends CI_controller
                     'nominal'   => $tambahin
                 );
                 $this->m_transaksi->update_anggaran_by_no_anggaran($no_anggaran, $data);
+                $alert = $this->main_generic->alert('Berhasil', 'Data berhasil ditambahkan', 'success');
+                $this->session->set_flashdata('message', $alert);
                 redirect('transaksi/realisasi');
             } else {
+                $alert = $this->main_generic->alert('Gagal', 'Penambahan anggaran kurang', 'danger');
+                $this->session->set_flashdata('message', $alert);
                 redirect('transaksi/tambah_kekurangan_anggaran/'.$no_anggaran.'/'.$kurang);
             }
         }

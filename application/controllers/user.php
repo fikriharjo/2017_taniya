@@ -110,21 +110,40 @@ class user extends CI_controller
     public function tambah_user(){
         $cari_username = $this->m_master_data->cari_username(set_value('username'));
         if($cari_username == null){
-            $data = array(
-                'username'      => set_value('username'),
-                'name'          => set_value('nama_user'),
-                'email'         => set_value('email'),
-                'password'      => password_hash(set_value('password'), PASSWORD_DEFAULT),
-                'role_id'       => set_value('role'),
-                'is_active'     => 1,
-                'date_created'  => 1
-            );
-            $this->m_master_data->tambah_user($data);
-            redirect('user/listUser');
-        } else {
-            // var_dump('User sudah ada'); die();
-            redirect('user/listUser');
+            $config['upload_path']          = './assets/foto/';
+            // $config['allowed_types']        = '*';
+            // $config['max_size']             = '*';
+            var_dump(set_value('userfile')); die();
+            $this->load->library('upload', $config);
+            if ($this->upload->do_upload('userfile')){
+                var_dump('jos'); die();
+                $fileName 	= $this->upload->data('file_name');
+                $targetPath = getcwd() . '/assets/foto/';
+                $targetFile = $targetPath . $fileName ;
+                $inputFileName = $targetFile;
+
+                $data = array(
+                    'username'      => set_value('username'),
+                    'name'          => set_value('nama_user'),
+                    'email'         => set_value('email'),
+                    'password'      => password_hash(set_value('password'), PASSWORD_DEFAULT),
+                    'role_id'       => set_value('role'),
+                    'is_active'     => 1,
+                    'date_created'  => 1,
+                    'foto'          => $fileName
+                );
+                $this->m_master_data->tambah_user($data);
+                $alert = $this->main_generic->alert('Berhasil', 'Data berhasil ditambahkan', 'success');
+                $this->session->set_flashdata('message', $alert);
+            } else {
+                $alert = $this->main_generic->alert('Gagal', 'Foto gagal diupload', 'danger');
+                $this->session->set_flashdata('message', $alert);
+            }
+        } else {    
+            $alert = $this->main_generic->alert('Gagal', 'Data sudah tersedia', 'danger');
+            $this->session->set_flashdata('message', $alert);
         }
+        redirect('user/listUser');
     }
     public function edit_user(){
         $data = array(

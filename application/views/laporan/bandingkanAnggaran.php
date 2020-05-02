@@ -295,58 +295,6 @@
         </div>
     </div>
 </section>
-<div class="modal fade in" id="modal-default" style="display:  padding-right: 17px;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span></button>
-                <h4 class="modal-title">Form tambah Anggaran</h4>
-            </div>
-            <div class="modal-body">
-                <form action="<?php echo base_url('transaksi/tambah_anggaran') ?>" method="POST">
-                    <div class="form-group">
-                        <label>Jenis Anggaran</label>
-                        <select name="jenis_anggaran" class="form-control">
-                            <option disabled selected>--Pilih Jenis Anggaran--</option>
-                            <?php foreach ($jenis_anggaran as $row) { ?>
-                                <option value="<?= $row['no_jenis_anggaran'] ?>"><?= $row['jenis_anggaran'] ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="">Bulan</label>
-                                <select name="bulan" class="form-control">
-                                    <option disabled selected>--Pilih Bulan--</option>
-                                    <?php for ($i = 1; $i <= 12; $i++) { ?>
-                                        <option value="<?= $i ?>"><?= get_monthname($i) ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="">Tahun</label>
-                                <select name="tahun" class="form-control">
-                                    <option disabled selected>--Pilih Tahun--</option>
-                                    <?php for ($i = 2018; $i <= date('Y'); $i++) { ?>
-                                        <option value="<?= $i ?>"><?= $i ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
-                </form>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
 <script>
     $(function() {
         $('#example1').DataTable()

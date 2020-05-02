@@ -155,13 +155,40 @@ class master_data extends CI_controller
         $this->session->set_flashdata('message', $alert);
         redirect('master_data/jenis_kegiatan');
     }
-    public function delete_jenis_kegiatan($id){
-        var_dump('coming soon');die();
+    public function delete_jenis_kegiatan($kd_jenis_kegiatan){
+        $cari = $this->m_master_data->cari_jenis_kegiatan_on_kegiatan($kd_jenis_kegiatan);
+        if($cari == null){
+            $this->m_master_data->delete_jenis_kegiatan_by_kd_jenis_kegiatan($kd_jenis_kegiatan);
+            $alert = $this->main_generic->alert('Berhasil', 'Data berhasil didelete', 'success');
+            $this->session->set_flashdata('message', $alert);
+        } else {
+            $alert = $this->main_generic->alert('Gagal', 'Data masih tersedia di kegiatan', 'danger');
+            $this->session->set_flashdata('message', $alert);
+        }
+        redirect('master_data/jenis_kegiatan');
     }
-    public function delete_kegiatan($id){
-        var_dump('coming soon');die();
+    public function delete_kegiatan($kd_kegiatan){
+        $cari = $this->m_master_data->cari_kegiatan_on_anggaran($kd_kegiatan);
+        if($cari == null){
+            $this->m_master_data->delete_kegiatan_by_unique_id($kd_kegiatan);
+            $alert = $this->main_generic->alert('Berhasil', 'Data berhasil didelete', 'success');
+            $this->session->set_flashdata('message', $alert);
+        } else {
+            $alert = $this->main_generic->alert('Gagal', 'Data masih tersedia di anggaran', 'danger');
+            $this->session->set_flashdata('message', $alert);
+        }
+        redirect('master_data/kegiatan');
     }
-    public function delete_coa($id){
-        var_dump('coming soon');die();
+    public function delete_coa($kode_akun){
+        $cari = $this->m_master_data->cari_coa_on_kegiatan($kode_akun);
+        if($cari == null){
+            $this->m_master_data->delete_coa_by_kode_akun($kode_akun);
+            $alert = $this->main_generic->alert('Berhasil', 'Data berhasil didelete', 'success');
+            $this->session->set_flashdata('message', $alert);
+        } else {
+            $alert = $this->main_generic->alert('Gagal', 'Data masih tersedia di kegiatan', 'danger');
+            $this->session->set_flashdata('message', $alert);
+        }
+        redirect('master_data/coa');
     }
 }

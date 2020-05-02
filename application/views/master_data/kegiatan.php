@@ -46,7 +46,7 @@
                             <td><?= $row['jenis_kegiatan'] ?></td>
                             <td align="center">
                                 <a data-kgt_id="<?= $row['id'] ?>" data-name="<?= $row['nama_kegiatan'] ?>" data-kode="<?= $row['unique_id'] ?>" data-toggle="modal" data-target="#modal-edit" href="#" class="btn btn-warning btn-sm" title="edit"><i class="fa fa-edit"></i></a>
-                                <a class="btn btn-danger btn-sm" title="hapus" href=<?php echo base_url('master_data/delete_kegiatan/'.$row['id']) ?>>
+                                <a class="btn btn-danger btn-sm" title="hapus" href=<?php echo base_url('master_data/delete_kegiatan/'.$row['unique_id']) ?>>
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </td>

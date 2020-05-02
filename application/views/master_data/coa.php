@@ -55,7 +55,7 @@
                                     <td><?= $row['nama'] ?></td>
                                     <td align="center">
                                         <a data-coa_id="<?= $row['id'] ?>" data-name="<?= $row['nama'] ?>" data-kode_akun="<?= $kode_akun[$no] ?>" data-header_akun="<?= $header[$no] ?>" data-toggle="modal" data-target="#modal-edit" href="#" class="btn btn-warning btn-sm" title="edit"><i class="fa fa-edit"></i></a>
-                                        <a class="btn btn-danger btn-sm" title="hapus" href=<?php echo base_url('master_data/delete_coa/'.$row['id']) ?>>
+                                        <a class="btn btn-danger btn-sm" title="hapus" href=<?php echo base_url('master_data/delete_coa/'.$row['kode_akun']) ?>>
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>

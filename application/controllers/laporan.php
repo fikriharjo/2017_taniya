@@ -168,4 +168,58 @@ class laporan extends CI_controller
         ];
         $this->main_generic->layout($pages, $data);
     }
+    public function bandingkanPendapatan()
+    {
+        // $hasil = 10000;
+        // var_dump(number_format($hasil,0,',','.')); die();
+        $pages = 'laporan/bandingkanPendapatan';
+        if (isset($_POST['month'])) {
+            $bulan = date('m', strtotime($_POST['month']));
+            $tahun = date('Y', strtotime($_POST['month']));
+            $tanggal = date('Y-m-d', strtotime($tahun.'-'.$bulan.'-01'));
+            // $pendapatan = @$this->db->select('periode, SUM(nominal) as nominal')->where('periode', $tahun.'-'.$bulan.'-'.'01')->where('kd_jenis_anggaran', 'JGR-556')->group_by('periode')->get('detail_anggaran')->result()[0]->nominal;
+            $anggaran = $this->m_transaksi->get_all_anggaran_by_periode($tanggal);
+            // var_dump($tanggal);die();
+            $realisasi = $this->m_transaksi->lihat_realisasi_sum_detail($tanggal);
+            // $pengeluaran = @$this->db->select('periode, SUM(nominal) as nominal')->where('periode', $tahun.'-'.$bulan.'-'.'01')->where('kd_jenis_anggaran', 'JGR-664')->group_by('periode')->get('detail_anggaran')->result()[0]->nominal;
+            
+            $pendapatan = 0;
+            $pengeluaran = 0;
+            $jumlah = 0;
+            // var_dump($anggaran); die();
+            foreach ($anggaran as $val) {
+                $jumlah++;
+                $jenisnya = strtoupper($val->jenis_anggaran);
+                if($jenisnya == 'PENDAPATAN'){
+                    $pendapatan = $pendapatan+$val->nominal;
+                } else {
+                    $pengeluaran = $pengeluaran+$val->nominal;
+                }
+            }
+            $lap = $anggaran;
+        } else {
+            $bulan = '0';
+            $tahun = '0';
+            $pendapatan = 0;
+            $pengeluaran = 0;
+            $anggaran = 0;
+            $jumlah = 0;
+            $realisasi = 0;
+            $lap = null;
+        }
+        // var_dump($realisasi); die();
+        $data = [
+            'user'          => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
+            'title'         => 'Laporan',
+            'subtitle'      => 'Laporan Anggaran',
+            'bulan'         => $bulan,
+            'tahun'         => $tahun,
+            'pendapatan'    => $pendapatan,
+            'pengeluaran'   => $pengeluaran,
+            'lap'           => $lap,
+            'jumlah'        => $jumlah,
+            'realisasi'     => $realisasi
+        ];
+        $this->main_generic->layout($pages, $data);
+    }
 }
