@@ -7,6 +7,7 @@
 </section>
 
 <section class="content">
+    <?php echo $this->session->flashdata('message'); ?>
     <?php echo form_error('menu', '<div class="alert alert-danger" role="alert">', '</div>') ?>
     <div class="box box-primary">
         <div class="box-header with-border">
@@ -38,7 +39,7 @@
                             <td><?= $no ?></td>
                             <td><?= $m['menu'] ?></td>
                             <td align="center">
-                                <a href="<?php echo base_url('') . $m['id'] ?>" class="btn btn-warning" title="edit"><i class="fa fa-edit"></i></a>
+                                <a href="<?php echo base_url('menu/edit_menu/') . $m['id'] ?>" class="btn btn-warning" title="edit"><i class="fa fa-edit"></i></a>
                                 <a href="<?php echo base_url('menu/deleteData/') . $m['id'] ?>" class="btn btn-danger" title="delete"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
@@ -62,7 +63,7 @@
                 <form action="<?php echo base_url('menu') ?>" method="POST">
                     <div class="form-group">
                         <label>Menu</label>
-                        <input type="text" name="menu" class="form-control">
+                        <input type="text" name="menu" class="form-control" placeholder='-- Masukan menu --'>
                     </div>
             </div>
             <div class="modal-footer">

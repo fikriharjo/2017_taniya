@@ -22,7 +22,7 @@
                 <div class="box box-primary">
                     <div class="box-body box-profile">
                     
-                        <img class="profile-user-img img-responsive img-circle" src="<?= base_url('assets/plugins/lte/dist/img/') . $user['image'] ?>" alt="User profile picture">
+                        <img class="profile-user-img img-responsive img-circle" src="<?= base_url('assets/foto/') . $user['image'] ?>" alt="User profile picture">
 
                         <h3 class="profile-username text-center"><?php echo $user['name'] ?></h3>
 
@@ -75,12 +75,11 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-2">
-
                                     </div>
                                     <div class="col-sm-10">
                                         <div class="row">
                                             <div class="col-sm-3">
-                                                <img src="<?php echo base_url('assets/plugins/lte/dist/img/') . $user['image'] ?>" class="img-thumbnail">
+                                                <img src="<?php echo base_url('assets/foto/') . $user['image'] ?>" class="img-thumbnail">
                                             </div>
                                             <div class="col-sm-9">
                                                 <div class="custom-file">

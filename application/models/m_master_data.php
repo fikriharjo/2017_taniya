@@ -63,6 +63,16 @@ class m_master_data extends CI_model
             return array();
         }
     }
+    public function cari_sub_menu_by_user_menu($id){
+        $hasil = $this->db->where('menu_id', $id)
+                          ->limit(1)
+                          ->get('user_sub_menu');
+        if($hasil->num_rows() > 0){
+            return $hasil->row();
+        } else {
+            return array();
+        }
+    }
     public function tambah_user($data){
         $this->db->insert('user', $data);
     }

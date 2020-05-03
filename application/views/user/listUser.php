@@ -66,7 +66,8 @@
                 <h4 class="modal-title">Tambah User</h4>
             </div>
             <div class="modal-body">
-                <form action="<?php echo base_url('user/tambah_user') ?>" method="POST">
+                <form class="form-horizontal" action="<?= base_url('user/tambah_user') ?>" method="POST" enctype="multipart/form-data">
+                <!-- <form action="<?php echo base_url('user/tambah_user') ?>" method="POST"> -->
                     <div class="form-group col-md-12">
                         <label>Username</label>
                         <input type="text" name="username" class="form-control" placeholder='-- Masukan username --'>
@@ -94,7 +95,7 @@
                     </div>
                     <div class="form-group col-md-12">
                         <label>Foto</label>
-                        <input type="file" name="userfile" class="form-control">
+                        <input type="file" class="form-control" id="image" name="image">
                     </div>
                 </div>
                 <div class="modal-footer ">

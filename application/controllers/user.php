@@ -34,7 +34,7 @@ class user extends CI_controller
         //cek jika ada gambar yang diupload
         $uploadImage = $_FILES['image']['name'];
         if ($uploadImage) {
-            $config['upload_path'] = './assets/plugins/lte/dist/img';
+            $config['upload_path'] = './assets/foto';
             $config['allowed_types'] = 'gif|jpg|png|jpeg';
             $config['max_size']     = '4096';
 
@@ -42,7 +42,7 @@ class user extends CI_controller
             if ($this->upload->do_upload('image')) {
                 $old_image = $data['user']['image'];
                 if ($old_image != 'default.jpg') {
-                    unlink(FCPATH . 'assets/img/' . $old_image);
+                    unlink(FCPATH . 'assets/foto/' . $old_image);
                 }
                 $new_image = $this->upload->data('file_name');
                 $this->db->set('image', $new_image);
@@ -108,36 +108,41 @@ class user extends CI_controller
         $this->main_generic->layout($pages, $data);
     }
     public function tambah_user(){
-        $cari_username = $this->m_master_data->cari_username(set_value('username'));
+        $cari_username  = $this->m_master_data->cari_username(set_value('username'));
+        $data['user']   = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         if($cari_username == null){
-            $config['upload_path']          = './assets/foto/';
-            // $config['allowed_types']        = '*';
-            // $config['max_size']             = '*';
-            var_dump(set_value('userfile')); die();
-            $this->load->library('upload', $config);
-            if ($this->upload->do_upload('userfile')){
-                var_dump('jos'); die();
-                $fileName 	= $this->upload->data('file_name');
-                $targetPath = getcwd() . '/assets/foto/';
-                $targetFile = $targetPath . $fileName ;
-                $inputFileName = $targetFile;
+            $uploadImage = $_FILES['image']['name'];
+            // var_dump($uploadImage); die();
+            if ($uploadImage) {
+                $config['upload_path'] = './assets/foto';
+                $config['allowed_types'] = 'gif|jpg|png|jpeg';
+                $config['max_size']     = '4096';
 
-                $data = array(
-                    'username'      => set_value('username'),
-                    'name'          => set_value('nama_user'),
-                    'email'         => set_value('email'),
-                    'password'      => password_hash(set_value('password'), PASSWORD_DEFAULT),
-                    'role_id'       => set_value('role'),
-                    'is_active'     => 1,
-                    'date_created'  => 1,
-                    'foto'          => $fileName
-                );
-                $this->m_master_data->tambah_user($data);
-                $alert = $this->main_generic->alert('Berhasil', 'Data berhasil ditambahkan', 'success');
-                $this->session->set_flashdata('message', $alert);
-            } else {
-                $alert = $this->main_generic->alert('Gagal', 'Foto gagal diupload', 'danger');
-                $this->session->set_flashdata('message', $alert);
+                $this->load->library('upload', $config);
+                if ($this->upload->do_upload('image')) {
+                    $old_image = $data['user']['image'];
+                    if ($old_image != 'default.jpg') {
+                        unlink(FCPATH . 'assets/foto/' . $old_image);
+                    }
+                    $new_image = $this->upload->data('file_name');
+
+                    $data = array(
+                        'username'      => set_value('username'),
+                        'name'          => set_value('nama_user'),
+                        'email'         => set_value('email'),
+                        'password'      => password_hash(set_value('password'), PASSWORD_DEFAULT),
+                        'role_id'       => set_value('role'),
+                        'is_active'     => 1,
+                        'date_created'  => 1,
+                        'image'         => $new_image
+                    );
+                    $this->m_master_data->tambah_user($data);
+                    $alert = $this->main_generic->alert('Berhasil', 'Data berhasil ditambahkan', 'success');
+                    $this->session->set_flashdata('message', $alert);
+                } else {
+                    $alert = $this->main_generic->alert('Gagal', 'Foto gagal diupload', 'danger');
+                    $this->session->set_flashdata('message', $alert);
+                }
             }
         } else {    
             $alert = $this->main_generic->alert('Gagal', 'Data sudah tersedia', 'danger');
