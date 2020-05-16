@@ -42,7 +42,7 @@
                         <tr>
                             <td><?= $no ?></td>
                             <td><?= $row['kd_realisasi'] ?></td>
-                            <td><?= $row['kd_jenis_anggaran'] ?></td>
+                            <td><?= $row['jenis_anggaran'] ?></td>
                             <td><?= $row['tgl_realisasi'] ?></td>
                             <td align="right"><?= formatRp($row['nominal_realisasi']) ?></td>
                             <td align="center">

@@ -25,6 +25,7 @@
                     <tr>
                         <th>No</th>
                         <th>No anggaran</th>
+                        <th>Nama kegiatan</th>
                         <th>Anggaran</th>
                         <th>Realisasi</th>
                         <th>Sisa</th>
@@ -39,6 +40,7 @@
                         <tr>
                             <td><?= $no ?></td>
                             <td><?= $row['no_anggaran'] ?></td>
+                            <td><?= $row['nama_kegiatan'] ?></td>
                             <td><?= $row['anggaran']; ?></td>
                             <td>
                                 <?php 
@@ -58,7 +60,7 @@
                             </td>
                             <td>
                                 <?php
-                                    if($nilai > 0){ ?>
+                                    if(($nilai > 0) and $row['nama_kegiatan'] != 'Investasi'){ ?>
                                         <a href=<?php echo base_url('transaksi/transfer_anggaran/'.$row['no_anggaran']) ?> class='btn btn-info'>
                                             Transfer
                                         </a> <?php

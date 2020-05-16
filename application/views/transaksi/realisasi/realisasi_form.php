@@ -75,6 +75,7 @@
                         <div class="col-sm-4">
                             <input type="number" class="form-control" id="anggaran_seharusnya" readonly>
                         </div>
+                        <input type="hidden" class="form-control" id="namanya_kegiatan" name='namanya_kegiatan'>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Nominal Realisasi</label>
@@ -267,40 +268,59 @@
     }
 
     function cek_kecukupan_anggaran(){
-        var seharusnya      = document.getElementById('anggaran_seharusnya').value;
-        var realisasinya    = document.getElementById('nominal').value;
-        var sisa_anggaran   = document.getElementById('sisa_anggaran').value;
-        var pengurangan     = seharusnya-realisasinya;
-        var open_ga         = sisa_anggaran-realisasinya;
-        $('#nominal_hasil_kurang').val(pengurangan);
-        
-        var jenis = document.getElementById('hide').value;
-        // alert(jenis);
-        if(jenis != 'JGR-556'){
-            
-            if(open_ga >= 0){
-                alert('Bisa di proses');
-                if((realisasinya > seharusnya)){
-                    $('#boleh_dibuka').hide();
-                    $('#boleh_dibuka2').show();
-                    $('#boleh_dibuka3').hide();
+        var nama_kegiatan   = document.getElementById('nama_kegiatan').value;
+        $.ajax({
+            url : '<?php echo base_url('transaksi/ambil_namanya_kegiatan') ?>',
+            async : false,
+            dataType : 'JSON',
+            method : 'POST',
+            data : {
+                no_anggaran : nama_kegiatan
+            },
+            success : function(data){
+                var seharusnya      = document.getElementById('anggaran_seharusnya').value;
+                var realisasinya    = document.getElementById('nominal').value;
+                var sisa_anggaran   = document.getElementById('sisa_anggaran').value;
+                var pengurangan     = seharusnya-realisasinya;
+                var open_ga         = sisa_anggaran-realisasinya;
+                $('#nominal_hasil_kurang').val(pengurangan);
+                $('#namanya_kegiatan').val(data);
+                var jenis = document.getElementById('hide').value;
+                // alert(jenis);
+                if(jenis != 'JGR-556'){
+                    // alert(nama_kegiatan)
+                    if(data == 'Investasi'){
+                        alert('Bisa di proses');
+                        $('#boleh_dibuka').show();
+                        $('#boleh_dibuka2').hide();
+                        $('#boleh_dibuka3').hide();
+                    } else {
+                        if(open_ga >= 0){
+                            alert('Bisa di proses');
+                            if((realisasinya > seharusnya)){
+                                $('#boleh_dibuka').hide();
+                                $('#boleh_dibuka2').show();
+                                $('#boleh_dibuka3').hide();
+                            } else {
+                                $('#boleh_dibuka').show();
+                                $('#boleh_dibuka2').hide();
+                                $('#boleh_dibuka3').hide();
+                            }
+                        } else {
+                            alert('Total anggaran kurang');
+                            $('#boleh_dibuka').hide();
+                            $('#boleh_dibuka2').hide();
+                            $('#boleh_dibuka3').show();
+                        }
+                    }
                 } else {
+                    alert('Bisa di proses');
                     $('#boleh_dibuka').show();
                     $('#boleh_dibuka2').hide();
                     $('#boleh_dibuka3').hide();
                 }
-            } else {
-                alert('Total anggaran kurang');
-                $('#boleh_dibuka').hide();
-                $('#boleh_dibuka2').hide();
-                $('#boleh_dibuka3').show();
             }
-        } else {
-            alert('Bisa di proses');
-            $('#boleh_dibuka').show();
-            $('#boleh_dibuka2').hide();
-            $('#boleh_dibuka3').hide();
-        }
+        })
     }
 
     function tambah_anggaran(){

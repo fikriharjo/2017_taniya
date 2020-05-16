@@ -166,7 +166,7 @@
         </div>
     </div>
 </section>
-<div class="modal fade in" id="modal-default" style="display:  padding-right: 17px;">
+<div class="modal fade in" id="modal-default" style="padding-right: 17px">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

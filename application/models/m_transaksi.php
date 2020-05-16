@@ -139,7 +139,18 @@ class m_transaksi extends CI_model
         }
     }
 
-    
+    public function ambil_namanya_kegiatan($no_anggaran){
+        $hasil = $this->db->where('no_anggaran', $no_anggaran)
+                          ->limit(1)
+                          ->join('kegiatan', 'kegiatan.unique_id = anggaran.kd_kegiatan')
+                          ->select('nama_kegiatan')
+                          ->get('anggaran');
+        if($hasil->num_rows() > 0){
+            return $hasil->row();
+        } else {
+            return array();
+        }
+    }
     
     public function ambil_anggaran_kegiatan($date, $no_anggaran){
         $hasil = $this->db->where('periode', $date)

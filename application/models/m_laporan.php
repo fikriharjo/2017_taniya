@@ -12,16 +12,31 @@ class m_laporan extends CI_model
         ];
         $this->db->insert('jurnal', $data);
     }
+    // function get_jurnal($bulan, $tahun)
+    // {
+    //     $this->db->select('distinct(realisasi.kd_realisasi), detail_realisasi.nominal as nominal, coa1, coa2, tgl_realisasi,');
+    //     $this->db->from('realisasi');
+    //     $this->db->join('detail_realisasi', 'realisasi.kd_realisasi = detail_realisasi.kd_realisasi');
+    //     $this->db->join('anggaran', 'anggaran.no_anggaran = realisasi.no_anggaran');
+    //     $this->db->join('kegiatan', 'kegiatan.unique_id = anggaran.kd_kegiatan');
+    //     $this->db->where('DATE_FORMAT(tgl_realisasi,"%m")', $bulan);
+    //     $this->db->where('DATE_FORMAT(tgl_realisasi,"%Y")', $tahun);
+    //     $this->db->order_by('detail_realisasi.nominal');
+    //     return $this->db->get()->result_array();
+    // }
     function get_jurnal($bulan, $tahun)
     {
-        $this->db->select('distinct(realisasi.kd_realisasi), detail_realisasi.nominal as nominal, coa1, coa2, tgl_realisasi,');
+        $this->db->select('distinct(realisasi.kd_realisasi), (
+                                                                    select      sum(nominal)
+                                                                    from        detail_realisasi
+                                                                    where       detail_realisasi.kd_realisasi = realisasi.kd_realisasi
+        ) as nominal, coa1, coa2, tgl_realisasi,');
         $this->db->from('realisasi');
-        $this->db->join('detail_realisasi', 'realisasi.kd_realisasi = detail_realisasi.kd_realisasi');
         $this->db->join('anggaran', 'anggaran.no_anggaran = realisasi.no_anggaran');
         $this->db->join('kegiatan', 'kegiatan.unique_id = anggaran.kd_kegiatan');
         $this->db->where('DATE_FORMAT(tgl_realisasi,"%m")', $bulan);
         $this->db->where('DATE_FORMAT(tgl_realisasi,"%Y")', $tahun);
-        $this->db->order_by('detail_realisasi.nominal');
+        $this->db->order_by('realisasi.kd_realisasi');
         return $this->db->get()->result_array();
     }
     function get_total_db($bulan, $tahun)

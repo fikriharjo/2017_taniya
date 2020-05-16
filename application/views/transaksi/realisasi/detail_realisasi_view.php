@@ -29,17 +29,24 @@
                         <th>No</th>
                         <th>Kode Realisasi</th>
                         <th>Tanggal Realisasi</th>
+                        <th>Kegiatan Realisasi</th>
+                        <th>Jenis Anggaran</th>
+                        <th>Keterangan Realisasi</th>
                         <th style="text-align:right">Nominal Realisasi</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php $no = 0;
+                    // var_dump($result); die();
                     foreach ($result as $row) {
                         $no++; ?>
                         <tr>
                             <td><?= $no ?></td>
                             <td><?= $row['kd_realisasi'] ?></td>
                             <td><?= $row['tgl_realisasi'] ?></td>
+                            <td><?= $row['nama_kegiatan'] ?></td>
+                            <td><?= $row['jenis_anggaran'] ?></td>
+                            <td><?= $row['keterangan'] ?></td>
                             <td align="right"><?= formatRp($row['nominal']) ?></td>
                         </tr>
                     <?php } ?>

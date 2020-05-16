@@ -43,135 +43,147 @@
                     </div>
                 </div>
             </form>
-            <?php if (!empty($_POST['month'])) : ?>
-                <hr>
-                <center>
-                    <strong>
-                        <!-- <h2>Balai Latihan Kerja</h2> -->
-                        <h3>Buku Besar</h3>
-                        <h4>Periode Bulan <?php echo date('M',strtotime($_POST['month'])) . ' Tahun ' . date('Y',strtotime($_POST['month'])) ?></h4>
-                    </strong>
-                </center>
-                <div class="col-xs-12">
-                    <?php
-                        $total = 0;
-                        foreach ($before as $val) {
-                            if($val->coa1 == $akun){
-                                $total = $total+$val->nominal;
-                            } else {
-                                $total = $total-$val->nominal;
-                            }
-                        }
-                        $nol = 0;
-                        $pisah = str_split($akun);
-                        $header = $pisah[0];
-                    ?>
-                    <table class="table table-bordered table-hover table-striped">
-                        <thead>
-                            <tr>
-                                <th rowspan="2" style="text-align: center; vertical-align: top">Tanggal</th>
-                                <th rowspan="2" style="text-align: center; vertical-align: top">Keterangan</th>
-                                <th rowspan="2" style="text-align: center; vertical-align: top">Ref</th>
-                                <th rowspan="2" style="text-align: center; vertical-align: top">Debet</th>
-                                <th rowspan="2" style="text-align: center; vertical-align: top">Kredit</th>
-                                <th colspan="2" style="text-align: center">Saldo</th>
-                            </tr>
-                            <tr>
-                                <th>Debet</th>
-                                <th>Kredit</th>
-                            </tr>
-                            <tr>
-                                <th colspan="5" style="text-align: center">Saldo awal</th>
-                                <th>
-                                    <?php 
-                                        if(($header == 1) or ($header == 5)){
-                                            echo 'Rp. ' . number_format($total, 2, ',', '.');
-                                        } else {
-                                            echo 'Rp. ' . number_format($nol, 2, ',', '.');
-                                        }
-                                    ?>
-                                </th>
-                                <th>
-                                    <?php 
-                                        if(($header > 1) and ($header < 5)){
-                                            echo 'Rp. ' . number_format($total, 2, ',', '.');
-                                        } else {
-                                            echo 'Rp. ' . number_format($nol, 2, ',', '.');
-                                        }
-                                    ?>
-                                </th>
-                            </tr>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                                $a = 0;
-                                // var_dump($buku_besar);die();
-                                foreach ($buku_besar as $row) { 
-                                    $show = false;
-                                    foreach ($coa as $val) {
-                                        if(($row['coa1'] == $val['kode_akun']) and ($row['coa1'] == $akun)){
-                                            $nama = $val['nama'];
-                                            $reff = $val['kode_akun'];
-                                            $show = true;
-                                        } else if(($row['coa2'] == $val['kode_akun']) and ($row['coa2'] == $akun)){
-                                            $nama = $val['nama'];
-                                            $reff = $val['kode_akun'];
-                                            $show = true;
-                                        }
-                                    } 
-                                    if($show == true){ 
-                                        $nol = 0; ?>
-                                        <tr>
-                                            <td><?php echo $row['tgl_realisasi'] ?></td>
-                                            <td><?php echo $nama ?></td>
-                                            <td><?php echo $reff ?></td>
-                                            <td>
-                                                <?php 
-                                                    if(($row['jenis_anggaran'] == 'Pendapatan') and ($show == true)){
-                                                        $total = $total+$row['nominal'];
-                                                        echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.');
-                                                    } else {
-                                                        echo 'Rp. ' . number_format($nol, 2, ',', '.');
-                                                    }
-                                                ?>
-                                            </td>
-                                            <td>
-                                                <?php 
-                                                    if(($row['jenis_anggaran'] == 'Pengeluaran') and ($show == true)){
-                                                        $total = $total-$row['nominal'];
-                                                        echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.');
-                                                    } else {
-                                                        echo 'Rp. ' . number_format($nol, 2, ',', '.');
-                                                    }
-                                                ?>
-                                            </td>
-                                            <td>
-                                                <?php 
-                                                    if(($header == 1) or ($header == 5)){
-                                                        echo 'Rp. ' . number_format($total, 2, ',', '.');
-                                                    } else {
-                                                        echo 'Rp. ' . number_format($nol, 2, ',', '.');
-                                                    }
-                                                ?>
-                                            </td>
-                                            <td>
-                                                <?php 
-                                                    if(($header > 1) and ($header < 5)){
-                                                        echo 'Rp. ' . number_format($total, 2, ',', '.');
-                                                    } else {
-                                                        echo 'Rp. ' . number_format($nol, 2, ',', '.');
-                                                    }
-                                                ?>
-                                            </td>
-                                        </tr> <?php
-                                    } 
+            <?php 
+                if (!empty($_POST['month'])) { ?>
+                    <hr>
+                    <center>
+                        <strong>
+                            <!-- <h2>Balai Latihan Kerja</h2> -->
+                            <h3>Buku Besar</h3>
+                            <h4>Periode Bulan <?php echo date('M',strtotime($_POST['month'])) . ' Tahun ' . date('Y',strtotime($_POST['month'])) ?></h4>
+                        </strong>
+                    </center>
+                    <div class="col-xs-12">
+                        <?php
+                            $total = 0;
+                            foreach ($before as $val) {
+                                if($val->coa1 == $akun){
+                                    $total = $total+$val->nominal;
+                                } else {
+                                    $total = $total-$val->nominal;
                                 }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php endif ?>
+                            }
+                            $nol = 0;
+                            $pisah = str_split($akun);
+                            $header = $pisah[0];
+                        ?>
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" style="text-align: center; vertical-align: top">Tanggal</th>
+                                    <th rowspan="2" style="text-align: center; vertical-align: top">Keterangan</th>
+                                    <th rowspan="2" style="text-align: center; vertical-align: top">Ref</th>
+                                    <th rowspan="2" style="text-align: center; vertical-align: top">Debet</th>
+                                    <th rowspan="2" style="text-align: center; vertical-align: top">Kredit</th>
+                                    <th colspan="2" style="text-align: center">Saldo</th>
+                                </tr>
+                                <tr>
+                                    <th>Debet</th>
+                                    <th>Kredit</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="5" style="text-align: center">Saldo awal</th>
+                                    <th>
+                                        <?php 
+                                            if(($header == 1) or ($header == 5)){
+                                                echo 'Rp. ' . number_format($total, 2, ',', '.');
+                                            } else {
+                                                echo 'Rp. ' . number_format($nol, 2, ',', '.');
+                                            }
+                                        ?>
+                                    </th>
+                                    <th>
+                                        <?php 
+                                            if(($header > 1) and ($header < 5)){
+                                                echo 'Rp. ' . number_format($total, 2, ',', '.');
+                                            } else {
+                                                echo 'Rp. ' . number_format($nol, 2, ',', '.');
+                                            }
+                                        ?>
+                                    </th>
+                                </tr>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    $a = 0;
+                                    // var_dump($buku_besar);die();
+                                    foreach ($buku_besar as $row) { 
+                                        $show = false;
+                                        foreach ($coa as $val) {
+                                            if(($row['coa1'] == $val['kode_akun']) and ($row['coa1'] == $akun)){
+                                                $nama   = $val['nama'];
+                                                //
+                                                $jenis  = 'COA1';
+                                                //
+                                                $reff   = $val['kode_akun'];
+                                                $show   = true;
+                                            } else if(($row['coa2'] == $val['kode_akun']) and ($row['coa2'] == $akun)){
+                                                $nama   = $val['nama'];
+                                                //
+                                                $jenis  = 'COA2';
+                                                //
+                                                $reff   = $val['kode_akun'];
+                                                $show   = true;
+                                            }
+                                        } 
+                                        if($show == true){ 
+                                            $nol = 0; ?>
+                                            <tr>
+                                                <td><?php echo $row['tgl_realisasi'] ?></td>
+                                                <td><?php echo $nama ?></td>
+                                                <td><?php echo $reff ?></td>
+                                                <td>
+                                                    <?php 
+                                                        // if(($row['jenis_anggaran'] == 'Pendapatan') and ($show == true)){
+                                                        if(($jenis == 'COA1') and ($show == true)){
+                                                            if(($header == 1) or ($header == 5)){
+                                                                $total = $total+$row['nominal'];
+                                                            } else {
+                                                                $total = $total-$row['nominal'];
+                                                            }
+                                                            echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.');
+                                                        }
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php 
+                                                        // if(($row['jenis_anggaran'] == 'Pengeluaran') and ($show == true)){
+                                                        if(($jenis == 'COA2') and ($show == true)){
+                                                            if(($header > 1) and ($header < 5)){
+                                                                $total = $total+$row['nominal'];
+                                                            } else {
+                                                                $total = $total-$row['nominal'];
+                                                            }
+                                                            echo 'Rp. ' . number_format($row['nominal'], 2, ',', '.');
+                                                        }
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php 
+                                                        if(($header == 1) or ($header == 5)){
+                                                        // if($jenis == 'COA1'){
+                                                            echo 'Rp. ' . number_format($total, 2, ',', '.');
+                                                        }
+                                                    ?>
+                                                </td>
+                                                <td>
+                                                    <?php 
+                                                        if(($header > 1) and ($header < 5)){
+                                                        // if($jenis == 'COA2'){
+                                                            echo 'Rp. ' . number_format($total, 2, ',', '.');
+                                                        }
+                                                    ?>
+                                                </td>
+                                            </tr> <?php
+                                        }
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div> <?php 
+                } 
+            ?>
         </div>
     </div>
 </section>

@@ -215,8 +215,9 @@ class transaksi extends CI_controller
             'user'              => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             'title'             => 'Realisasi',
             'subtitle'          => 'Data Realisasi',
-            'result'            => $this->db->select('realisasi.kd_realisasi, tgl_realisasi, kd_jenis_anggaran, SUM(nominal) as nominal_realisasi', FALSE)
+            'result'            => $this->db->select('realisasi.kd_realisasi, tgl_realisasi, jenis_anggaran, SUM(nominal) as nominal_realisasi', FALSE)
                                             ->join('detail_realisasi', 'detail_realisasi.kd_realisasi = realisasi.kd_realisasi')
+                                            ->join('jenis_anggaran', 'jenis_anggaran.no_jenis_anggaran = realisasi.kd_jenis_anggaran')
                                             ->group_by('kd_realisasi')
                                             ->get('realisasi')
                                             ->result_array(),
@@ -233,7 +234,14 @@ class transaksi extends CI_controller
             'subtitle'          => 'Detail Realisasi',
             'result'            => $this->db->where('realisasi.kd_realisasi', $kd_realisasi)
                                             ->join('detail_realisasi', 'detail_realisasi.kd_realisasi = realisasi.kd_realisasi')
+                                            ->join('anggaran', 'anggaran.no_anggaran = detail_realisasi.no_anggaran')
+                                            ->join('jenis_anggaran', 'jenis_anggaran.no_jenis_anggaran = anggaran.kd_jenis_anggaran')
+                                            ->join('kegiatan', 'kegiatan.unique_id = anggaran.kd_kegiatan')
                                             ->get('realisasi')->result_array(),
+
+                                            // ->where('realisasi.kd_realisasi', $kd_realisasi)
+                                            // ->join('detail_realisasi', 'detail_realisasi.kd_realisasi = realisasi.kd_realisasi')
+                                            // ->get('realisasi')->result_array(),
         ];
         $this->main_generic->layout($pages, $data);
     }
@@ -268,6 +276,11 @@ class transaksi extends CI_controller
         echo json_encode($hasil);
     }
 
+    public function ambil_namanya_kegiatan(){
+        $hasil = $this->m_transaksi->ambil_namanya_kegiatan(set_value('no_anggaran'));
+        echo json_encode($hasil->nama_kegiatan);
+    }
+
     public function tambahRealisasi()
     {
         $pages = "transaksi/realisasi/realisasi_form";
@@ -297,13 +310,13 @@ class transaksi extends CI_controller
         if ($this->form_validation->run() == false) {
             $this->main_generic->layout($pages, $data);
         } else {
-            // var_dump(set_value('jenis_anggaran'));die();
-            if((set_value('sisa_anggaran') < set_value('nominal')) and (set_value('jenis_anggaran') == 'JGR-664')){
+            // var_dump(set_value('namanya_kegiatan'));die();
+            if((set_value('sisa_anggaran') < set_value('nominal')) and (set_value('jenis_anggaran') == 'JGR-664') and (set_value('namanya_kegiatan') != 'Investasi')){
                 // var_dump('1');die();
                 $alert = $this->main_generic->alert('Warning', 'Sisa anggaran kurang', 'warning');
                 $this->session->set_flashdata('message', $alert);
                 redirect('transaksi/tambah_kekurangan_anggaran/'.set_value('nama_kegiatan').'/'.set_value('nominal_hasil_kurang'));
-            } else if((set_value('nominal_hasil_kurang') < 0) and (set_value('jenis_anggaran') == 'JGR-664')){
+            } else if((set_value('nominal_hasil_kurang') < 0) and (set_value('jenis_anggaran') == 'JGR-664')  and (set_value('namanya_kegiatan') != 'Investasi')){
                 // var_dump('jos2'); die();
                 $data1 = [
                     'kd_realisasi'      => $_POST['kd_realisasi'],
@@ -386,9 +399,10 @@ class transaksi extends CI_controller
             'user'      => $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array(),
             'title'     => 'Sisa Anggaran',
             'subtitle'  => 'Sisa Anggaran',
-            'result'    => $this->db->order_by('id', 'asc')
+            'result'    => $this->db->order_by('anggaran.id', 'asc')
                                     ->where('periode', $periode)
-                                    ->select("no_anggaran, nominal as anggaran, (
+                                    ->join('kegiatan', 'kegiatan.unique_id = anggaran.kd_kegiatan')
+                                    ->select("no_anggaran, nominal as anggaran, nama_kegiatan, (
                                         select  sum(detail_realisasi.nominal)
                                         from    detail_realisasi
                                         join    realisasi on realisasi.kd_realisasi = detail_realisasi.kd_realisasi
@@ -432,7 +446,7 @@ class transaksi extends CI_controller
             $data = array(
                 'kd_realisasi'  => $idnya,
                 'no_anggaran'   => $this->session->userdata('data_2')['no_anggaran'],
-                'nominal'       => set_value('nominal')-set_value('anggaran_seharusnya'),
+                'nominal'       => set_value('nominal')+set_value('nominal_hasil_kurang'),
                 'keterangan'    => set_value('keterangan')
             );
             $this->m_transaksi->saveDetailRealisasi($data);

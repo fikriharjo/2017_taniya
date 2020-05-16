@@ -41,13 +41,24 @@
                         <div class="form-group">
                             <label>Jenis Kegiatan </label>
                             <?php 
-                                // var_dump($jenis_kegiatan); die(); 
+                                // var_dump($detail_anggaran); die(); 
                             ?>
                             <select name="jenis_kegiatan" id="" class="form-control">
                                 <option disabled selected>--Pilih Jenis Kegiatan</option>
-                                <?php foreach ($jenis_kegiatan as $row) { ?>
-                                    <option value="<?= $row['unique_id'] ?>"><?= $row['nama_kegiatan'] ?></option>
-                                <?php } ?>
+                                <?php 
+                                    foreach ($jenis_kegiatan as $row) { 
+                                        $sama = false;
+                                        foreach ($detail_anggaran as $val) {
+                                            if($val['kd_kegiatan'] == $row['unique_id']){
+                                                $sama = true;
+                                            }
+                                        } 
+                                        
+                                        if($sama == false){ ?>
+                                            <option value="<?= $row['unique_id'] ?>"><?= $row['nama_kegiatan'] ?></option> <?php 
+                                        }                                        
+                                    } 
+                                ?>
                             </select>
                             <?= form_error('jenis_kegiatan', '<small class="text-danger pl-3">', '</small>') ?>
 

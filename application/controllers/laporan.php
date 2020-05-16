@@ -11,8 +11,7 @@ class laporan extends CI_controller
         $this->load->model('m_coa');
         $this->load->model('m_transaksi');
     }
-    public function lihat_jurnal()
-    {
+    public function lihat_jurnal(){
         $pages = 'laporan/jurnal';
         if (isset($_POST['month'])) {
             $bulan = date('m', strtotime(set_value('month')));
