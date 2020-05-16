@@ -129,7 +129,7 @@ class m_transaksi extends CI_model
     public function ambil_periode($jenis){
         $hasil = $this->db->order_by('periode')
                           ->where('kd_jenis_anggaran', $jenis)
-                          ->where('periode >= ', date('Y-m-01'))
+                        //   ->where('periode >= ', date('Y-m-01'))
                           ->select('distinct(periode)')
                           ->get('anggaran');
         if($hasil->num_rows() > 0){
@@ -139,11 +139,12 @@ class m_transaksi extends CI_model
         }
     }
 
-    public function ambil_namanya_kegiatan($no_anggaran){
+    public function ambil_jenisnya_kegiatan($no_anggaran){
         $hasil = $this->db->where('no_anggaran', $no_anggaran)
                           ->limit(1)
                           ->join('kegiatan', 'kegiatan.unique_id = anggaran.kd_kegiatan')
-                          ->select('nama_kegiatan')
+                          ->join('jenis_kegiatan', 'jenis_kegiatan.kd_jenis_kegiatan = kegiatan.kd_jenis_kegiatan')
+                          ->select('*')
                           ->get('anggaran');
         if($hasil->num_rows() > 0){
             return $hasil->row();

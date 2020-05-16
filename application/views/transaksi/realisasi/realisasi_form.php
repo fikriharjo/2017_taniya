@@ -75,7 +75,7 @@
                         <div class="col-sm-4">
                             <input type="number" class="form-control" id="anggaran_seharusnya" readonly>
                         </div>
-                        <input type="hidden" class="form-control" id="namanya_kegiatan" name='namanya_kegiatan'>
+                        <input type="hidden" class="form-control" id="jenisnya_kegiatan" name='jenisnya_kegiatan'>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Nominal Realisasi</label>
@@ -269,8 +269,9 @@
 
     function cek_kecukupan_anggaran(){
         var nama_kegiatan   = document.getElementById('nama_kegiatan').value;
+        // alert(nama_kegiatan);
         $.ajax({
-            url : '<?php echo base_url('transaksi/ambil_namanya_kegiatan') ?>',
+            url : '<?php echo base_url('transaksi/ambil_jenisnya_kegiatan') ?>',
             async : false,
             dataType : 'JSON',
             method : 'POST',
@@ -278,14 +279,15 @@
                 no_anggaran : nama_kegiatan
             },
             success : function(data){
+                // alert(data);
                 var seharusnya      = document.getElementById('anggaran_seharusnya').value;
                 var realisasinya    = document.getElementById('nominal').value;
                 var sisa_anggaran   = document.getElementById('sisa_anggaran').value;
                 var pengurangan     = seharusnya-realisasinya;
                 var open_ga         = sisa_anggaran-realisasinya;
                 $('#nominal_hasil_kurang').val(pengurangan);
-                $('#namanya_kegiatan').val(data);
-                var jenis = document.getElementById('hide').value;
+                $('#jenisnya_kegiatan').val(data);
+                var jenis = document.getElementById('jenisnya_kegiatan').value;
                 // alert(jenis);
                 if(jenis != 'JGR-556'){
                     // alert(nama_kegiatan)

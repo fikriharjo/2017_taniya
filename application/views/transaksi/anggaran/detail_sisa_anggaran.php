@@ -60,7 +60,7 @@
                             </td>
                             <td>
                                 <?php
-                                    if(($nilai > 0) and $row['nama_kegiatan'] != 'Investasi'){ ?>
+                                    if(($nilai > 0) and $row['jenis_kegiatan'] != 'Investasi'){ ?>
                                         <a href=<?php echo base_url('transaksi/transfer_anggaran/'.$row['no_anggaran']) ?> class='btn btn-info'>
                                             Transfer
                                         </a> <?php

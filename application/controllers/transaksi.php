@@ -276,9 +276,9 @@ class transaksi extends CI_controller
         echo json_encode($hasil);
     }
 
-    public function ambil_namanya_kegiatan(){
-        $hasil = $this->m_transaksi->ambil_namanya_kegiatan(set_value('no_anggaran'));
-        echo json_encode($hasil->nama_kegiatan);
+    public function ambil_jenisnya_kegiatan(){
+        $hasil = $this->m_transaksi->ambil_jenisnya_kegiatan(set_value('no_anggaran'));
+        echo json_encode($hasil->jenis_kegiatan);
     }
 
     public function tambahRealisasi()
@@ -311,12 +311,12 @@ class transaksi extends CI_controller
             $this->main_generic->layout($pages, $data);
         } else {
             // var_dump(set_value('namanya_kegiatan'));die();
-            if((set_value('sisa_anggaran') < set_value('nominal')) and (set_value('jenis_anggaran') == 'JGR-664') and (set_value('namanya_kegiatan') != 'Investasi')){
+            if((set_value('sisa_anggaran') < set_value('nominal')) and (set_value('jenis_anggaran') == 'JGR-664') and (set_value('jenisnya_kegiatan') != 'Investasi')){
                 // var_dump('1');die();
                 $alert = $this->main_generic->alert('Warning', 'Sisa anggaran kurang', 'warning');
                 $this->session->set_flashdata('message', $alert);
                 redirect('transaksi/tambah_kekurangan_anggaran/'.set_value('nama_kegiatan').'/'.set_value('nominal_hasil_kurang'));
-            } else if((set_value('nominal_hasil_kurang') < 0) and (set_value('jenis_anggaran') == 'JGR-664')  and (set_value('namanya_kegiatan') != 'Investasi')){
+            } else if((set_value('nominal_hasil_kurang') < 0) and (set_value('jenis_anggaran') == 'JGR-664')  and (set_value('jenisnya_kegiatan') != 'Investasi')){
                 // var_dump('jos2'); die();
                 $data1 = [
                     'kd_realisasi'      => $_POST['kd_realisasi'],
@@ -402,7 +402,8 @@ class transaksi extends CI_controller
             'result'    => $this->db->order_by('anggaran.id', 'asc')
                                     ->where('periode', $periode)
                                     ->join('kegiatan', 'kegiatan.unique_id = anggaran.kd_kegiatan')
-                                    ->select("no_anggaran, nominal as anggaran, nama_kegiatan, (
+                                    ->join('jenis_kegiatan', 'jenis_kegiatan.kd_jenis_kegiatan = kegiatan.kd_jenis_kegiatan')
+                                    ->select("no_anggaran, nominal as anggaran, jenis_kegiatan, nama_kegiatan, (
                                         select  sum(detail_realisasi.nominal)
                                         from    detail_realisasi
                                         join    realisasi on realisasi.kd_realisasi = detail_realisasi.kd_realisasi
